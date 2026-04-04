@@ -2,7 +2,7 @@
 
 A warm, book-inspired documentation theme for [Hugo](https://gohugo.io).
 
-**[Live demo and full documentation](https://jackhickey.github.io/hugo-moo-theme/)**
+**[Live demo and full documentation](https://hugo-moo-theme.moo.media/)**
 
 ## Features
 
@@ -35,7 +35,7 @@ theme = "hugo-moo-theme"
   noClasses = false
 ```
 
-See the [documentation site](https://jackhickey.github.io/hugo-moo-theme/) for configuration, typography, shortcodes, auth visibility, and layout details.
+See the [documentation site](https://hugo-moo-theme.moo.media/) for configuration, typography, shortcodes, auth visibility, and layout details.
 
 ## License
 

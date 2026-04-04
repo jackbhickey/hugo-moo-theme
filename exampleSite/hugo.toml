@@ -1,4 +1,4 @@
-baseURL = "https://jackhickey.github.io/hugo-moo-theme/"
+baseURL = "https://hugo-moo-theme.moo.media/"
 languageCode = "en"
 title = "Tome"
 theme = "hugo-moo-theme"
