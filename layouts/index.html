@@ -1,0 +1,38 @@
+{{ define "main" }}
+<article class="prose home-page">
+  <h1>{{ .Title }}</h1>
+  {{ .Content }}
+
+  {{ with (site.GetPage "/blog") }}
+    {{ if .RegularPages }}
+    <section class="home-docs" aria-label="Recent posts">
+      <h2>Recent Posts</h2>
+      <nav class="section-index">
+        <ul>
+          {{ range (first 5 .RegularPages.ByDate.Reverse) }}
+            <li>
+              <a href="{{ .Permalink }}">{{ .Title }}</a>
+              <p>{{ .Description }}</p>
+            </li>
+          {{ end }}
+        </ul>
+      </nav>
+    </section>
+    {{ end }}
+  {{ end }}
+
+  {{ $authEnabled := .Site.Params.authCheckUrl }}
+  <section class="home-docs" aria-label="Documentation">
+    <h2>Documentation</h2>
+    <nav class="home-sections">
+      {{ range .Site.Sections }}
+        {{ $sectionPublic := default true .Params.public }}
+        <a href="{{ .Permalink }}" class="home-section-card"{{ if and $authEnabled (not $sectionPublic) }} data-auth-required{{ end }}>
+          <h2>{{ .Title }}</h2>
+          {{ with .Description }}<p>{{ . }}</p>{{ end }}
+        </a>
+      {{ end }}
+    </nav>
+  </section>
+</article>
+{{ end }}

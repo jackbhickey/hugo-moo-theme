@@ -1,0 +1,47 @@
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <a href="{{ "/" | relURL }}" class="sidebar-logo">{{ .Site.Title | default "Docs" }}</a>
+    {{ with .Site.Params.subtitle }}<span class="sidebar-subtitle">{{ . }}</span>{{ end }}
+  </div>
+
+  <nav class="sidebar-nav" aria-label="Documentation">
+    <a href="{{ "/" | relURL }}" class="nav-home{{ if .IsHome }} is-active{{ end }}">
+      Overview
+    </a>
+
+    {{ $currentPage := . }}
+    {{ $authEnabled := .Site.Params.authCheckUrl }}
+    {{ range .Site.Sections }}
+      {{ $sectionSlug := .Section }}
+      {{ $isOpen := or (eq $currentPage.Section $sectionSlug) (eq $currentPage.Permalink .Permalink) }}
+      {{ $sectionPublic := default true .Params.public }}
+      <details class="nav-section"{{ if $isOpen }} open{{ end }}{{ if and $authEnabled (not $sectionPublic) }} data-auth-required{{ end }}>
+        <summary>
+          <a href="{{ .Permalink }}"{{ if eq $currentPage.Permalink .Permalink }} class="is-active"{{ end }}>
+            {{- .Title -}}
+          </a>
+        </summary>
+        <ul class="nav-pages">
+          {{ range .RegularPages }}
+            {{ $pagePublic := default true .Params.public }}
+            <li{{ if and $authEnabled (not $pagePublic) }} data-auth-required{{ end }}>
+              <a href="{{ .Permalink }}"{{ if eq . $currentPage }} class="is-active"{{ end }}>
+                {{- .Title -}}
+              </a>
+            </li>
+          {{ end }}
+        </ul>
+      </details>
+    {{ end }}
+  </nav>
+
+  <div class="sidebar-footer">
+    {{ with .Site.Params.authCheckUrl }}
+    <a href="{{ $.Site.Params.signInUrl | default "/oauth2/sign_in?rd=/" }}" class="sidebar-auth-link" data-show-when="signed-out">Sign in</a>
+    <a href="{{ $.Site.Params.signOutUrl | default "/oauth2/sign_out" }}" class="sidebar-auth-link" data-show-when="signed-in">Sign out</a>
+    {{ end }}
+    {{ with .Site.Params.repoUrl }}
+    <a href="{{ . }}" class="sidebar-repo-link">Source</a>
+    {{ end }}
+  </div>
+</aside>

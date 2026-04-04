@@ -1,0 +1,19 @@
+{{ define "main" }}
+<article class="prose">
+  <h1>{{ .Title }}</h1>
+  {{ .Content }}
+
+  {{ if .RegularPages }}
+  <nav class="section-index" aria-label="Pages in this section">
+    <ul>
+      {{ range .RegularPages }}
+        <li>
+          <a href="{{ .Permalink }}">{{ .Title }}</a>
+          {{ with .Description }}<p>{{ . }}</p>{{ end }}
+        </li>
+      {{ end }}
+    </ul>
+  </nav>
+  {{ end }}
+</article>
+{{ end }}

@@ -1,0 +1,12 @@
+name = "Tome"
+license = "MIT"
+licenselink = "https://github.com/jackhickey/hugo-moo-theme/blob/main/LICENSE"
+description = "A warm, book-inspired documentation theme for Hugo. Fluid typography via Utopia scales, collapsible sidebar navigation, optional auth visibility, and blog support."
+homepage = "https://github.com/jackhickey/hugo-moo-theme"
+demosite = "https://jackhickey.github.io/hugo-moo-theme/"
+min_version = "0.120.0"
+tags = ["documentation", "blog", "responsive", "serif", "minimal"]
+
+[author]
+  name = "Jack Hickey"
+  homepage = "https://moo.media"
