@@ -36,9 +36,9 @@ jobs:
       - name: Deploy
         env:
           DEPLOY_KEY: ${{ secrets.KIZUNA_DEPLOY_KEY }}
-          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+          DEPLOY_HOST: ${{ secrets.HUGO_MOO_THEME_DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.HUGO_MOO_THEME_DEPLOY_USER }}
+          DEPLOY_PATH: ${{ secrets.HUGO_MOO_THEME_DEPLOY_PATH }}
         run: |
           mkdir -p ~/.ssh
           echo "$DEPLOY_KEY" > ~/.ssh/deploy_key
