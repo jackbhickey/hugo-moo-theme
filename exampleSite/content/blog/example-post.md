@@ -1,11 +1,11 @@
 ---
 title: "An Example Blog Post"
 date: 2026-04-04
-description: "This is what a blog post looks like in Tome. It has a date, an author, and all the usual prose elements."
+description: "This is what a blog post looks like in moo-theme. It has a date, an author, and all the usual prose elements."
 author: "Jack"
 ---
 
-This is an example blog post. Blog posts in Tome get a date and author displayed below the title, and are sorted reverse-chronologically in the blog listing and on the home page.
+This is an example blog post. Blog posts in moo-theme get a date and author displayed below the title, and are sorted reverse-chronologically in the blog listing and on the home page.
 
 ## Writing a post
 

@@ -6,7 +6,7 @@ weight: 2
 
 ## Fonts
 
-Tome uses three font families:
+moo-theme uses three font families:
 
 - **Fraunces** — headings (h1–h6). A display serif with warmth and personality.
 - **Cormorant Garamond** — body text, navigation, and UI. An elegant text serif.
@@ -59,7 +59,7 @@ Inline `code` gets a subtle background and border. Code blocks get a left accent
 
 ```go
 func main() {
-    fmt.Println("Hello from Tome")
+    fmt.Println("Hello from moo-theme")
 }
 ```
 

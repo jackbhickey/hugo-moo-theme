@@ -6,14 +6,14 @@ weight: 1
 
 ## Installation
 
-Add Tome as a Hugo module or clone it into your themes directory:
+Add moo-theme as a Hugo module or clone it into your themes directory:
 
 ```bash
 # As a git submodule
-git submodule add https://github.com/jackhickey/hugo-moo-theme.git themes/hugo-moo-theme
+git submodule add https://github.com/jackbhickey/hugo-moo-theme.git themes/hugo-moo-theme
 
 # Or just clone it
-git clone https://github.com/jackhickey/hugo-moo-theme.git themes/hugo-moo-theme
+git clone https://github.com/jackbhickey/hugo-moo-theme.git themes/hugo-moo-theme
 ```
 
 Then set the theme in your `hugo.toml`:
@@ -47,7 +47,7 @@ theme = "hugo-moo-theme"
 
 ## Content structure
 
-Tome expects a standard Hugo content structure:
+moo-theme expects a standard Hugo content structure:
 
 ```
 content/

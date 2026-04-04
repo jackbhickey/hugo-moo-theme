@@ -1,6 +1,6 @@
 ---
 title: "Shortcodes"
-description: "Custom shortcodes included with Tome"
+description: "Custom shortcodes included with moo-theme"
 weight: 3
 ---
 

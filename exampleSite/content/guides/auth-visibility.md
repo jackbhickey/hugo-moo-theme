@@ -4,7 +4,7 @@ description: "Optional client-side show/hide for authenticated content"
 weight: 4
 ---
 
-Tome includes an optional auth-aware visibility system. When enabled, pages with `public: false` in their frontmatter are hidden from navigation and the home page for unauthenticated visitors. The server still enforces access control — this is purely cosmetic.
+moo-theme includes an optional auth-aware visibility system. When enabled, pages with `public: false` in their frontmatter are hidden from navigation and the home page for unauthenticated visitors. The server still enforces access control — this is purely cosmetic.
 
 ## Enabling auth
 

@@ -1,4 +1,4 @@
-# Tome
+# moo-theme
 
 A warm, book-inspired documentation theme for [Hugo](https://gohugo.io).
 
@@ -18,7 +18,7 @@ A warm, book-inspired documentation theme for [Hugo](https://gohugo.io).
 ## Quick start
 
 ```bash
-git submodule add https://github.com/jackhickey/hugo-moo-theme.git themes/hugo-moo-theme
+git submodule add https://github.com/jackbhickey/hugo-moo-theme.git themes/hugo-moo-theme
 ```
 
 ```toml

@@ -1,12 +1,12 @@
 baseURL = "https://hugo-moo-theme.moo.media/"
 languageCode = "en"
-title = "Tome"
+title = "moo-theme"
 theme = "hugo-moo-theme"
 
 [params]
   subtitle = "theme docs"
   description = "A warm, book-inspired documentation theme for Hugo"
-  repoUrl = "https://github.com/jackhickey/hugo-moo-theme"
+  repoUrl = "https://github.com/jackbhickey/hugo-moo-theme"
 
 [markup]
   [markup.goldmark]
