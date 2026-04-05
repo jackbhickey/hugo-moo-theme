@@ -69,11 +69,12 @@
 .hardware-value {
   font-family: var(--font-mono);
   font-size: var(--step--2);
-  color: var(--color-text-faint);
+  color: var(--color-rule-strong);
 }
 
 .hardware-value-used {
   color: var(--color-text);
+  font-weight: 600;
 }
 
 .hardware-bar {
