@@ -36,10 +36,6 @@
   </nav>
 
   <div class="sidebar-footer">
-    <label class="font-toggle" for="font-toggle" title="Toggle sans-serif font">
-      <input type="checkbox" id="font-toggle">
-      <span class="font-toggle-label">Sans-serif</span>
-    </label>
     {{ with .Site.Params.authCheckUrl }}
     <a href="{{ $.Site.Params.signInUrl | default "/oauth2/sign_in?rd=/" }}" class="sidebar-auth-link" data-show-when="signed-out">Sign in</a>
     <a href="{{ $.Site.Params.signOutUrl | default "/oauth2/sign_out" }}" class="sidebar-auth-link" data-show-when="signed-in">Sign out</a>
