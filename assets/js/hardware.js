@@ -46,6 +46,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
       updateBar("cpu", data.cpu.percent, `${data.cpu.percent.toFixed(1)}%`);
 
+      const tempEl = card.querySelector('[data-stat="temp"]');
+      if (tempEl) {
+        tempEl.textContent = data.cpu.tempC > 0 ? `${data.cpu.tempC}°C` : "";
+      }
+
       const memUsedGB = (data.memory.usedMB / 1024).toFixed(1);
       const memTotalGB = (data.memory.totalMB / 1024).toFixed(1);
       const memPercent = (data.memory.usedMB / data.memory.totalMB) * 100;

@@ -3,12 +3,20 @@
    Real-time hardware telemetry display via SSE.
    ============================================================= */
 
+/* Adjacent cards flow side by side */
+.hardware-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-s);
+}
+
 .hardware-card {
   padding: var(--space-m);
   background: var(--color-surface-alt);
   border: 1px solid var(--color-rule);
   border-radius: 4px;
   max-width: 28rem;
+  flex: 1 1 14rem;
 }
 
 .hardware-card-title {
@@ -27,9 +35,22 @@
 
 .hardware-stat {
   display: grid;
-  grid-template-columns: 3.5em 1fr auto;
+  grid-template-columns: 3.5em 1fr auto auto;
   gap: var(--space-xs);
   align-items: center;
+}
+
+.hardware-temp {
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  color: var(--color-text-faint);
+  white-space: nowrap;
+  min-width: 3.5em;
+  text-align: right;
+
+  &:empty {
+    display: none;
+  }
 }
 
 .hardware-label {
