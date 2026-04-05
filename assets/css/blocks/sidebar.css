@@ -189,3 +189,22 @@
     color: var(--color-link);
   }
 }
+
+.font-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3xs);
+  cursor: pointer;
+  margin-bottom: var(--space-3xs);
+
+  & input {
+    accent-color: var(--color-accent);
+    margin: 0;
+  }
+}
+
+.font-toggle-label {
+  font-family: var(--font-body);
+  font-size: var(--step--2);
+  color: var(--color-text-faint);
+}
