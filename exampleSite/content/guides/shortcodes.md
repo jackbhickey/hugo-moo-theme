@@ -184,5 +184,3 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8097", nil))
 }
 ```
-
-For a production-ready implementation with CPU, memory, disk, temperature, network, and uptime collectors, see [hardware-status](https://github.com/jackbhickey/hugo-moo-theme) in the moo.media lab infrastructure.
