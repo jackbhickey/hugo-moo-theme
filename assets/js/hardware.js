@@ -21,10 +21,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function formatRate(bytesPerSec) {
-      if (bytesPerSec >= 1073741824) return `${(bytesPerSec / 1073741824).toFixed(1)} GB/s`;
-      if (bytesPerSec >= 1048576) return `${(bytesPerSec / 1048576).toFixed(1)} MB/s`;
-      if (bytesPerSec >= 1024) return `${(bytesPerSec / 1024).toFixed(1)} KB/s`;
-      return `${Math.round(bytesPerSec)} B/s`;
+      let num;
+      let unit;
+      if (bytesPerSec >= 1073741824) {
+        num = (bytesPerSec / 1073741824).toFixed(1);
+        unit = "GB/s";
+      } else if (bytesPerSec >= 1048576) {
+        num = (bytesPerSec / 1048576).toFixed(1);
+        unit = "MB/s";
+      } else if (bytesPerSec >= 1024) {
+        num = (bytesPerSec / 1024).toFixed(1);
+        unit = "KB/s";
+      } else {
+        num = Math.round(bytesPerSec);
+        unit = "B/s";
+      }
+      return `<strong>${num}</strong> ${unit}`;
     }
 
     function formatSize(gb) {
@@ -89,8 +101,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (data.network) {
         const rx = card.querySelector(".hardware-net-rx");
         const tx = card.querySelector(".hardware-net-tx");
-        if (rx) rx.textContent = `\u2193 ${formatRate(data.network.rxBytesPerSec)}`;
-        if (tx) tx.textContent = `\u2191 ${formatRate(data.network.txBytesPerSec)}`;
+        if (rx) rx.innerHTML = `\u2193 ${formatRate(data.network.rxBytesPerSec)}`;
+        if (tx) tx.innerHTML = `\u2191 ${formatRate(data.network.txBytesPerSec)}`;
       }
     }
 

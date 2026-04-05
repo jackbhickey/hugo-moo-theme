@@ -69,7 +69,8 @@
 .hardware-value {
   font-family: var(--font-mono);
   font-size: var(--step--2);
-  color: var(--color-rule-strong);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
 }
 
 .hardware-value-used {
@@ -110,7 +111,8 @@
 
 .hardware-net-values {
   display: flex;
-  gap: var(--space-xs);
+  gap: var(--space-s);
+  font-variant-numeric: tabular-nums;
 }
 
 .hardware-net-rx,
@@ -118,6 +120,13 @@
   font-family: var(--font-mono);
   font-size: var(--step--2);
   color: var(--color-text-muted);
+  min-width: 7em;
+  text-align: right;
+
+  & strong {
+    color: var(--color-text);
+    font-weight: 600;
+  }
 }
 
 .hardware-status {
