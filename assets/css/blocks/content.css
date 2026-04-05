@@ -15,6 +15,6 @@
   max-width: calc(var(--measure) + var(--space-2xl) * 2);
   background: var(--color-surface);
   box-shadow: var(--shadow-page);
-  padding: var(--space-2xl);
+  padding: var(--space-xl) var(--space-2xl) var(--space-2xl);
   border-radius: 2px;
 }
