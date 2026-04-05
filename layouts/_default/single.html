@@ -1,6 +1,11 @@
 {{ define "main" }}
 <article class="prose">
   <h1>{{ .Title }}</h1>
+  {{ if .Params.toc }}
+  <nav class="toc" aria-label="Table of contents">
+    {{ .TableOfContents }}
+  </nav>
+  {{ end }}
   {{ .Content }}
 </article>
 {{ end }}

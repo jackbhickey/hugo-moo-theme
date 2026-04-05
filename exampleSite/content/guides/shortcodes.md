@@ -2,6 +2,7 @@
 title: "Shortcodes"
 description: "Custom shortcodes included with moo-theme"
 weight: 3
+toc: true
 ---
 
 ## claude
