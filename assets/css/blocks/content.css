@@ -6,7 +6,7 @@
 .content {
   display: flex;
   justify-content: center;
-  padding: var(--space-xl) var(--space-l);
+  padding: var(--space-l) var(--space-l);
   min-width: 0;
 }
 
@@ -15,6 +15,6 @@
   max-width: calc(var(--measure) + var(--space-2xl) * 2);
   background: var(--color-surface);
   box-shadow: var(--shadow-page);
-  padding: var(--space-xl) var(--space-2xl) var(--space-2xl);
+  padding: var(--space-l) var(--space-2xl) var(--space-2xl);
   border-radius: 2px;
 }
