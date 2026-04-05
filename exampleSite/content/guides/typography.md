@@ -8,11 +8,11 @@ weight: 2
 
 moo-theme uses three font families:
 
-- **Fraunces** — headings (h1–h6). A display serif with warmth and personality.
-- **Cormorant Garamond** — body text, navigation, and UI. An elegant text serif.
+- [**Fraunces**](https://fonts.google.com/specimen/Fraunces) — headings (h1–h6). A display serif with warmth and personality.
+- [**Cormorant Garamond**](https://fonts.google.com/specimen/Cormorant+Garamond) — body text, navigation, and UI. An elegant text serif.
 - **Courier New** — code blocks and the `claude` shortcode.
 
-Both web fonts are loaded from Google Fonts.
+Both web fonts are loaded from [Google Fonts](https://fonts.google.com/).
 
 ## Type scale
 
@@ -39,7 +39,7 @@ Headings h2–h4 show a `#` anchor link on hover for deep linking.
 
 ### Paragraphs
 
-Body text is justified with automatic hyphenation on wider viewports, and left-aligned on mobile. The maximum line length is 68 characters (`--measure: 68ch`).
+Body text is left-aligned for readability (per WCAG 1.4.8). The maximum line length is 68 characters (`--measure: 68ch`).
 
 ### Lists
 
