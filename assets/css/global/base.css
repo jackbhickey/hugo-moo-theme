@@ -9,6 +9,7 @@
    Only affects prose content, not sidebar/chrome. */
 :root:has(#font-toggle:checked) .prose {
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-weight: 400;
 }
 
 body {
