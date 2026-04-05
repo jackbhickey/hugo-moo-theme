@@ -4,7 +4,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const apiBase = card.dataset.apiBase || "";
     const url = `${apiBase}/api/v1/hardware/${machine}/events`;
     const statusEl = card.querySelector(".hardware-status");
-    const disksEl = card.querySelector(".hardware-disks");
 
     function updateBar(stat, percent, text) {
       const row = card.querySelector(`[data-stat="${stat}"]`);
@@ -17,28 +16,63 @@ document.addEventListener("DOMContentLoaded", () => {
       value.textContent = text;
     }
 
-    function ensureDiskRow(mount) {
-      let row = card.querySelector(`[data-stat="disk-${CSS.escape(mount)}"]`);
-      if (row) return row;
-      row = document.createElement("div");
-      row.className = "hardware-stat";
-      row.dataset.stat = `disk-${mount}`;
-      row.innerHTML = `
-        <div class="hardware-stat-header">
-          <span class="hardware-label">${mount}</span>
-          <span class="hardware-value">—</span>
-        </div>
-        <div class="hardware-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Disk usage for ${mount}">
-          <div class="hardware-bar-fill"></div>
-        </div>`;
-      disksEl.appendChild(row);
-      return row;
-    }
-
     function formatSize(gb) {
       if (gb >= 1024) return `${(gb / 1024).toFixed(1)}T`;
       if (gb >= 100) return `${Math.round(gb)}G`;
       return `${gb.toFixed(1)}G`;
+    }
+
+    // Colors for stacked disk segments (cycling)
+    const segmentColors = [
+      "var(--color-accent)",
+      "var(--color-accent-light)",
+      "var(--color-text-muted)",
+    ];
+
+    function updateStorage(disks) {
+      const row = card.querySelector('[data-stat="storage"]');
+      if (!row) return;
+
+      const bar = row.querySelector(".hardware-bar-stacked");
+      const value = row.querySelector(".hardware-value");
+      const legend = row.querySelector(".hardware-disk-legend");
+
+      const totalGB = disks.reduce((sum, d) => sum + d.totalGB, 0);
+      const usedGB = disks.reduce((sum, d) => sum + d.usedGB, 0);
+      const pct = totalGB > 0 ? (usedGB / totalGB) * 100 : 0;
+
+      value.textContent = `${formatSize(usedGB)}/${formatSize(totalGB)}`;
+      bar.setAttribute("aria-valuenow", Math.round(pct));
+
+      // Build stacked segments
+      bar.innerHTML = "";
+      disks.forEach((disk, i) => {
+        const segPct = totalGB > 0 ? (disk.usedGB / totalGB) * 100 : 0;
+        const seg = document.createElement("div");
+        seg.className = "hardware-bar-segment";
+        seg.style.width = `${segPct}%`;
+        seg.style.background = segmentColors[i % segmentColors.length];
+        bar.appendChild(seg);
+      });
+
+      // Build legend if multiple disks
+      legend.innerHTML = "";
+      if (disks.length > 1) {
+        disks.forEach((disk, i) => {
+          const item = document.createElement("span");
+          item.className = "hardware-legend-item";
+          const swatch = document.createElement("span");
+          swatch.className = "hardware-legend-swatch";
+          swatch.style.background = segmentColors[i % segmentColors.length];
+          item.appendChild(swatch);
+          item.appendChild(
+            document.createTextNode(
+              `${disk.mount} ${formatSize(disk.usedGB)}/${formatSize(disk.totalGB)}`,
+            ),
+          );
+          legend.appendChild(item);
+        });
+      }
     }
 
     function handleMessage(event) {
@@ -50,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const tempEl = card.querySelector('[data-stat="temp"]');
       if (tempEl) {
-        tempEl.textContent = data.cpu.tempC > 0 ? `${data.cpu.tempC}°C` : "";
+        tempEl.textContent = data.cpu.tempC > 0 ? `${data.cpu.tempC}\u00B0C` : "";
       }
 
       const memUsedGB = (data.memory.usedMB / 1024).toFixed(1);
@@ -59,15 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
       updateBar("memory", memPercent, `${memUsedGB}/${memTotalGB}G`);
 
       if (data.disks) {
-        data.disks.forEach((disk) => {
-          ensureDiskRow(disk.mount);
-          const pct = (disk.usedGB / disk.totalGB) * 100;
-          updateBar(
-            `disk-${disk.mount}`,
-            pct,
-            `${formatSize(disk.usedGB)}/${formatSize(disk.totalGB)}`,
-          );
-        });
+        updateStorage(data.disks);
       }
     }
 

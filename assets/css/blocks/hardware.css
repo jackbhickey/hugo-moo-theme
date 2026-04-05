@@ -92,6 +92,47 @@
   transition: width 0.4s ease;
 }
 
+.hardware-bar-stacked {
+  display: flex;
+}
+
+.hardware-bar-segment {
+  height: 100%;
+  transition: width 0.4s ease;
+}
+
+.hardware-bar-segment + .hardware-bar-segment {
+  border-left: 1px solid var(--color-surface);
+}
+
+.hardware-disk-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3xs) var(--space-xs);
+  margin-top: 2px;
+
+  &:empty {
+    display: none;
+  }
+}
+
+.hardware-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  color: var(--color-text-faint);
+}
+
+.hardware-legend-swatch {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 1px;
+  flex-shrink: 0;
+}
+
 .hardware-status {
   font-family: var(--font-body);
   font-size: var(--step--2);
