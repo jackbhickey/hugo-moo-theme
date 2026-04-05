@@ -1,5 +1,20 @@
 <footer class="page-footer">
   <p>
-    {{ with .Site.Params.repoUrl }}<a href="{{ . }}">{{ $.Site.Title }}</a> · {{ end }}built with <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/jackbhickey/hugo-moo-theme">moo-theme</a>
+    {{ with .Site.Params.repoUrl }}<a href="{{ . }}">{{ $.Site.Title }}</a> · {{ end -}}
+    built with <a href="https://github.com/gohugoio/hugo/releases/tag/v{{ hugo.Version }}">Hugo v{{ hugo.Version }}</a>
+    {{- /* Resolve theme version: hugo module deps > site param > fallback */ -}}
+    {{- $themeVersion := "" -}}
+    {{- $themeLink := "https://github.com/jackbhickey/hugo-moo-theme" -}}
+    {{- range hugo.Deps -}}
+      {{- if strings.Contains .Path "hugo-moo-theme" -}}
+        {{- $themeVersion = .Version -}}
+      {{- end -}}
+    {{- end -}}
+    {{- with .Site.Params.themeVersion -}}
+      {{- $themeVersion = . -}}
+    {{- end -}}
+    {{- if $themeVersion }} and <a href="{{ $themeLink }}/tree/{{ $themeVersion }}">moo-theme {{ $themeVersion }}</a>
+    {{- else }} and <a href="{{ $themeLink }}">moo-theme</a>
+    {{- end }}
   </p>
 </footer>
