@@ -42,7 +42,7 @@
 
 .hardware-stat {
   display: grid;
-  grid-template-columns: 3.5em 1fr auto auto;
+  grid-template-columns: 3.5em 1fr auto;
   gap: var(--space-xs);
   align-items: center;
 }
@@ -51,13 +51,18 @@
   font-family: var(--font-mono);
   font-size: var(--step--2);
   color: var(--color-text-faint);
-  white-space: nowrap;
-  min-width: 3.5em;
-  text-align: right;
+  margin-left: var(--space-2xs);
 
   &:empty {
     display: none;
   }
+}
+
+.hardware-value-group {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  white-space: nowrap;
 }
 
 .hardware-label {
