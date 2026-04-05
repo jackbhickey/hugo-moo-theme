@@ -1,0 +1,60 @@
+/* =============================================================
+   Responsive Overrides
+   Adjustments for sidebar layout, content, and prose at
+   smaller viewports. Composition-level breakpoints live in
+   their own files (e.g. sidebar-layout.css).
+   ============================================================= */
+
+@media (max-width: 780px) {
+  .sidebar {
+    position: static;
+    height: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    border-right: none;
+    border-bottom: 1px solid var(--color-rule);
+    box-shadow: 0 2px 4px rgba(44, 36, 22, 0.08);
+    padding: 0;
+  }
+
+  .sidebar-header {
+    padding: var(--space-xs) var(--space-s);
+    border-bottom: none;
+    border-right: 1px solid var(--color-rule);
+    flex-shrink: 0;
+  }
+
+  .sidebar-logo {
+    font-size: var(--step-1);
+  }
+
+  .sidebar-nav {
+    display: none;
+  }
+
+  .sidebar-footer {
+    border-top: none;
+    padding: var(--space-xs) var(--space-s);
+    margin-left: auto;
+  }
+
+  .content {
+    padding: var(--space-m) var(--space-s);
+  }
+
+  .page-surface {
+    padding: var(--space-l) var(--space-m);
+  }
+}
+
+@media (max-width: 480px) {
+  .page-surface {
+    box-shadow: none;
+    padding: var(--space-m) var(--space-s);
+  }
+
+  .content {
+    padding: var(--space-s) var(--space-2xs);
+  }
+}

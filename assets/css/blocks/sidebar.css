@@ -1,0 +1,191 @@
+/* =============================================================
+   Block: Sidebar
+   Sticky navigation sidebar with collapsible sections.
+   ============================================================= */
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--color-sidebar-bg);
+  border-right: 1px solid var(--color-rule);
+  box-shadow: inset -4px 0 8px rgba(44, 36, 22, 0.06);
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.sidebar-header {
+  padding: var(--space-m) var(--space-s);
+  border-bottom: 1px solid var(--color-rule);
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: var(--step-2);
+  font-weight: 600;
+  color: var(--color-accent);
+  text-decoration: none;
+  line-height: 1;
+
+  &:hover {
+    color: var(--color-accent-light);
+  }
+}
+
+.sidebar-subtitle {
+  display: block;
+  font-family: var(--font-body);
+  font-size: var(--step--2);
+  color: var(--color-text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: var(--space-3xs);
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: var(--space-s) 0;
+  overflow-y: auto;
+}
+
+.nav-home {
+  display: block;
+  font-family: var(--font-body);
+  font-size: var(--step--1);
+  color: var(--color-text-muted);
+  text-decoration: none;
+  padding: var(--space-3xs) var(--space-s);
+  margin-bottom: var(--space-2xs);
+  border-radius: 0 4px 4px 0;
+  transition:
+    color 0.15s,
+    background 0.15s;
+
+  &:hover {
+    color: var(--color-accent);
+    background: rgba(122, 61, 31, 0.08);
+  }
+
+  &[aria-current="page"] {
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+}
+
+.nav-section {
+  margin-bottom: var(--space-3xs);
+
+  & summary {
+    list-style: none;
+    cursor: pointer;
+    padding: var(--space-3xs) var(--space-s);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    border-radius: 0 4px 4px 0;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &::before {
+      content: "\203A";
+      font-family: var(--font-body);
+      font-size: var(--step-0);
+      color: var(--color-text-faint);
+      transition: transform 0.15s;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    & a {
+      font-family: var(--font-body);
+      font-size: var(--step--1);
+      font-weight: 600;
+      color: var(--color-text-muted);
+      text-decoration: none;
+
+      &:hover {
+        color: var(--color-accent);
+      }
+
+      &[aria-current="page"] {
+        color: var(--color-accent);
+      }
+    }
+  }
+
+  &[open] > summary::before {
+    transform: rotate(90deg);
+  }
+}
+
+.nav-pages {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 var(--space-2xs) var(--space-m);
+
+  & li {
+    margin: 0;
+  }
+
+  /* biome-ignore lint/style/noDescendingSpecificity: .nav-pages a targets different elements than .nav-section summary a */
+  & a {
+    display: block;
+    font-family: var(--font-body);
+    font-size: var(--step--1);
+    color: var(--color-text-muted);
+    text-decoration: none;
+    padding: var(--space-3xs) var(--space-xs);
+    border-radius: 0 4px 4px 0;
+    transition:
+      color 0.15s,
+      background 0.15s;
+
+    &:hover {
+      color: var(--color-accent);
+      background: rgba(122, 61, 31, 0.08);
+    }
+
+    &[aria-current="page"] {
+      color: var(--color-accent);
+      font-weight: 600;
+      background: rgba(122, 61, 31, 0.12);
+      border-left: 3px solid var(--color-accent);
+      padding-left: calc(var(--space-xs) - 3px);
+    }
+  }
+}
+
+.sidebar-footer {
+  padding: var(--space-s);
+  border-top: 1px solid var(--color-rule);
+  flex-shrink: 0;
+}
+
+.sidebar-repo-link {
+  font-family: var(--font-body);
+  font-size: var(--step--2);
+  color: var(--color-text-faint);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--color-link);
+  }
+}
+
+.sidebar-auth-link {
+  font-family: var(--font-body);
+  font-size: var(--step--2);
+  color: var(--color-text-faint);
+  text-decoration: none;
+  padding: var(--space-3xs) 0;
+
+  &:hover {
+    color: var(--color-link);
+  }
+}

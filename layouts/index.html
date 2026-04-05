@@ -24,7 +24,7 @@
   {{ $authEnabled := .Site.Params.authCheckUrl }}
   <section class="home-docs" aria-label="Documentation">
     <h2>Documentation</h2>
-    <nav class="home-sections">
+    <nav class="home-sections grid">
       {{ range .Site.Sections }}
         {{ $sectionPublic := default true .Params.public }}
         <a href="{{ .Permalink }}" class="home-section-card"{{ if and $authEnabled (not $sectionPublic) }} data-auth-required{{ end }}>

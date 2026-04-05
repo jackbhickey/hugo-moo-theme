@@ -1,0 +1,33 @@
+/* =============================================================
+   Utilities: Colors
+   Background and text color classes from design tokens.
+   ============================================================= */
+
+.color-text {
+  color: var(--color-text);
+}
+.color-muted {
+  color: var(--color-text-muted);
+}
+.color-faint {
+  color: var(--color-text-faint);
+}
+.color-accent {
+  color: var(--color-accent);
+}
+.color-link {
+  color: var(--color-link);
+}
+
+.bg-page {
+  background-color: var(--color-page-bg);
+}
+.bg-surface {
+  background-color: var(--color-surface);
+}
+.bg-surface-alt {
+  background-color: var(--color-surface-alt);
+}
+.bg-sidebar {
+  background-color: var(--color-sidebar-bg);
+}

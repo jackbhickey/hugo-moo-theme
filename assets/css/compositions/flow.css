@@ -1,0 +1,9 @@
+/* =============================================================
+   Composition: Flow
+   Consistent vertical rhythm between sibling elements.
+   Override --flow-space locally to adjust spacing.
+   ============================================================= */
+
+.flow > * + * {
+  margin-block-start: var(--flow-space, 1em);
+}

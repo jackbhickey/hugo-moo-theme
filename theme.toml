@@ -4,7 +4,7 @@ licenselink = "https://github.com/jackbhickey/hugo-moo-theme/blob/main/LICENSE"
 description = "A warm, book-inspired documentation theme for Hugo. Fluid typography via Utopia scales, collapsible sidebar navigation, optional auth visibility, and blog support."
 homepage = "https://github.com/jackbhickey/hugo-moo-theme"
 demosite = "https://hugo-moo-theme.moo.media/"
-min_version = "0.120.0"
+min_version = "0.158.0"
 tags = ["documentation", "blog", "responsive", "serif", "minimal"]
 
 [author]

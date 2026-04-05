@@ -1,0 +1,20 @@
+/* =============================================================
+   Block: Content Area
+   Main content container and page surface card.
+   ============================================================= */
+
+.content {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-xl) var(--space-l);
+  min-width: 0;
+}
+
+.page-surface {
+  width: 100%;
+  max-width: calc(var(--measure) + var(--space-2xl) * 2);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-page);
+  padding: var(--space-2xl);
+  border-radius: 2px;
+}

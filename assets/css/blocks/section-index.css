@@ -1,0 +1,97 @@
+/* =============================================================
+   Block: Section Index
+   Lists of pages within a documentation section or blog.
+   ============================================================= */
+
+.section-index {
+  margin-top: var(--space-l);
+
+  & ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+  }
+
+  & li {
+    border-left: 3px solid var(--color-rule);
+    padding-left: var(--space-m);
+    transition: border-color 0.15s;
+
+    &:hover {
+      border-color: var(--color-accent-light);
+    }
+  }
+
+  & a {
+    font-size: var(--step-1);
+    font-weight: normal;
+    color: var(--color-link);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--color-link-hover);
+    }
+  }
+
+  & p {
+    font-family: var(--font-body);
+    font-size: var(--step--1);
+    color: var(--color-text-muted);
+    margin: var(--space-3xs) 0 0;
+    text-align: left;
+    hyphens: none;
+  }
+}
+
+.blog-index {
+  & ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-m);
+  }
+
+  & li {
+    border-left: 3px solid var(--color-rule);
+    padding-left: var(--space-m);
+    transition: border-color 0.15s;
+
+    &:hover {
+      border-color: var(--color-accent-light);
+    }
+  }
+
+  & a {
+    font-size: var(--step-1);
+    font-weight: normal;
+    color: var(--color-link);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--color-link-hover);
+    }
+  }
+
+  & time {
+    display: block;
+    font-family: var(--font-body);
+    font-size: var(--step--2);
+    color: var(--color-text-faint);
+    font-style: italic;
+    margin-top: var(--space-3xs);
+  }
+
+  & p {
+    font-family: var(--font-body);
+    font-size: var(--step--1);
+    color: var(--color-text-muted);
+    margin: var(--space-3xs) 0 0;
+    text-align: left;
+    hyphens: none;
+  }
+}

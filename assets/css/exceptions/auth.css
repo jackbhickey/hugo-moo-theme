@@ -1,0 +1,23 @@
+/* =============================================================
+   Exception: Auth Visibility
+   JS sets [data-authenticated] on <html> when the user has a
+   valid session. Uses data attributes for CUBE exception pattern.
+   ============================================================= */
+
+[data-auth-required],
+[data-show-when="signed-in"] {
+  display: none;
+}
+
+:root[data-authenticated] [data-auth-required] {
+  display: unset;
+}
+:root[data-authenticated] details[data-auth-required] {
+  display: block;
+}
+:root[data-authenticated] [data-show-when="signed-in"] {
+  display: unset;
+}
+:root[data-authenticated] [data-show-when="signed-out"] {
+  display: none;
+}

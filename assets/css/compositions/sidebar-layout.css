@@ -1,0 +1,23 @@
+/* =============================================================
+   Composition: Sidebar Layout
+   Two-column layout with a fixed sidebar and flexible content.
+   ============================================================= */
+
+.sidebar-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+}
+
+@media (min-width: 1400px) {
+  .sidebar-layout {
+    grid-template-columns: 280px 1fr;
+  }
+}
+
+@media (max-width: 780px) {
+  .sidebar-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+}

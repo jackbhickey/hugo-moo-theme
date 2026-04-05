@@ -1,0 +1,10 @@
+/* =============================================================
+   Composition: Center
+   Centers content with a max-width constraint.
+   ============================================================= */
+
+.center {
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}

@@ -1,0 +1,30 @@
+/* =============================================================
+   Block: Post
+   Blog post header and metadata.
+   ============================================================= */
+
+.post-header {
+  margin-bottom: var(--space-l);
+
+  & h1 {
+    margin-bottom: var(--space-2xs);
+  }
+}
+
+.post-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+  font-family: var(--font-body);
+  font-size: var(--step--1);
+  color: var(--color-text-faint);
+
+  & time {
+    font-style: italic;
+  }
+
+  & .post-author::before {
+    content: "\2014";
+    margin-right: var(--space-xs);
+  }
+}

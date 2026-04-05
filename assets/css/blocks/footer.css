@@ -1,0 +1,23 @@
+/* =============================================================
+   Block: Footer
+   Page footer with credits and links.
+   ============================================================= */
+
+.page-footer {
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-m);
+  border-top: 1px solid var(--color-rule);
+  font-family: var(--font-body);
+  font-size: var(--step--2);
+  color: var(--color-text-faint);
+  text-align: center;
+
+  & a {
+    color: var(--color-text-faint);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--color-link);
+    }
+  }
+}

@@ -1,0 +1,17 @@
+/* =============================================================
+   Block: Claude Section
+   Monospace-styled content for Claude AI output.
+   ============================================================= */
+
+.claude-section {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  line-height: 1.6;
+
+  & p,
+  & ol,
+  & ul {
+    font-family: inherit;
+    font-size: inherit;
+  }
+}

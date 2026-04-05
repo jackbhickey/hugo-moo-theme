@@ -1,0 +1,39 @@
+/* =============================================================
+   Block: Breadcrumb
+   Page hierarchy navigation.
+   ============================================================= */
+
+.breadcrumb {
+  margin-bottom: var(--space-m);
+
+  & ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3xs);
+    font-family: var(--font-body);
+    font-size: var(--step--2);
+    color: var(--color-text-faint);
+  }
+
+  & li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3xs);
+  }
+
+  & li + li::before {
+    content: "/";
+  }
+
+  & a {
+    color: var(--color-link);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

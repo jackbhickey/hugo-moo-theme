@@ -1,0 +1,193 @@
+/* =============================================================
+   Block: Card
+   Hoverable cards for home page sections and service directory.
+   ============================================================= */
+
+/* -- Home page ------------------------------------------------ */
+
+.home-page h1 {
+  font-size: var(--step-5);
+}
+
+.home-sections {
+  --grid-min: 280px;
+  --grid-gap: var(--space-s);
+  margin-top: var(--space-xl);
+}
+
+.home-docs h2 {
+  font-family: var(--font-heading);
+  font-weight: 400;
+  font-size: var(--step-2);
+  color: var(--color-accent);
+  border-bottom: 1px solid var(--color-rule);
+  padding-bottom: var(--space-3xs);
+  margin-bottom: var(--space-m);
+}
+
+.home-section-card {
+  display: block;
+  padding: var(--space-m);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-rule);
+  border-radius: 4px;
+  text-decoration: none;
+  color: var(--color-text);
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s,
+    background 0.15s;
+}
+
+.home-section-card:hover {
+  border-color: var(--color-accent-light);
+  box-shadow: 0 2px 8px rgba(122, 61, 31, 0.12);
+  background: var(--color-surface);
+}
+
+.home-section-card h2 {
+  font-family: var(--font-heading);
+  font-size: var(--step-1);
+  font-weight: 400;
+  color: var(--color-accent);
+  margin: 0 0 var(--space-3xs);
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.home-section-card p {
+  font-family: var(--font-body);
+  font-size: var(--step--1);
+  color: var(--color-text-muted);
+  margin: 0;
+  text-align: left;
+  hyphens: none;
+}
+
+/* -- Service directory ---------------------------------------- */
+
+.svc-section {
+  margin: var(--space-xl) 0;
+}
+
+.svc-group {
+  margin-bottom: var(--space-l);
+}
+
+.svc-group-title {
+  font-family: var(--font-heading);
+  font-size: var(--step-1);
+  font-weight: 400;
+  color: var(--color-accent);
+  margin: 0 0 var(--space-xs);
+  border-bottom: 1px solid var(--color-rule);
+  padding-bottom: var(--space-3xs);
+}
+
+.svc-grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--space-2xs);
+}
+
+.svc-name {
+  font-family: var(--font-heading);
+  font-size: var(--step-0);
+  font-weight: 400;
+  color: var(--color-link);
+  line-height: 1.2;
+}
+
+.svc-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xs);
+  padding: var(--space-xs) var(--space-s);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-rule);
+  border-radius: 4px;
+  text-decoration: none;
+  color: inherit;
+  transition:
+    border-color 0.15s,
+    background 0.15s,
+    box-shadow 0.15s;
+  min-height: 72px;
+
+  &:hover {
+    background: var(--color-surface);
+    border-color: var(--color-accent-light);
+    box-shadow: 0 2px 6px rgba(44, 36, 22, 0.08);
+  }
+
+  &:hover .svc-name {
+    color: var(--color-link-hover);
+  }
+}
+
+.svc-desc {
+  font-family: var(--font-body);
+  font-size: var(--step--2);
+  color: var(--color-text-muted);
+  line-height: 1.4;
+  flex: 1;
+}
+
+.svc-badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3xs);
+  margin-top: var(--space-3xs);
+}
+
+.svc-server-badge {
+  font-family: var(--font-body);
+  font-size: var(--step--2);
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 999px;
+  border: 1px solid;
+}
+
+.svc-server-kizuna {
+  color: #b45309;
+  background: rgba(180, 83, 9, 0.07);
+  border-color: rgba(180, 83, 9, 0.2);
+}
+
+.svc-server-shinkai {
+  color: #0f766e;
+  background: rgba(15, 118, 110, 0.07);
+  border-color: rgba(15, 118, 110, 0.2);
+}
+
+.svc-server-homeassistant {
+  color: #6d28d9;
+  background: rgba(109, 40, 217, 0.07);
+  border-color: rgba(109, 40, 217, 0.2);
+}
+
+.svc-ts-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-family: var(--font-body);
+  font-size: var(--step--2);
+  font-weight: 500;
+  color: #246bfd;
+  padding: 2px 6px 2px 4px;
+  background: rgba(36, 107, 253, 0.07);
+  border: 1px solid rgba(36, 107, 253, 0.18);
+  border-radius: 999px;
+  width: fit-content;
+
+  & svg {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+  }
+}

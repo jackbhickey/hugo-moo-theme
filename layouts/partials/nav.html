@@ -1,11 +1,11 @@
-<aside class="sidebar">
+<aside class="sidebar" aria-label="Site navigation">
   <div class="sidebar-header">
     <a href="{{ "/" | relURL }}" class="sidebar-logo">{{ .Site.Title | default "Docs" }}</a>
     {{ with .Site.Params.subtitle }}<span class="sidebar-subtitle">{{ . }}</span>{{ end }}
   </div>
 
   <nav class="sidebar-nav" aria-label="Documentation">
-    <a href="{{ "/" | relURL }}" class="nav-home{{ if .IsHome }} is-active{{ end }}">
+    <a href="{{ "/" | relURL }}" class="nav-home"{{ if .IsHome }} aria-current="page"{{ end }}>
       Overview
     </a>
 
@@ -17,7 +17,7 @@
       {{ $sectionPublic := default true .Params.public }}
       <details class="nav-section"{{ if $isOpen }} open{{ end }}{{ if and $authEnabled (not $sectionPublic) }} data-auth-required{{ end }}>
         <summary>
-          <a href="{{ .Permalink }}"{{ if eq $currentPage.Permalink .Permalink }} class="is-active"{{ end }}>
+          <a href="{{ .Permalink }}"{{ if eq $currentPage.Permalink .Permalink }} aria-current="page"{{ end }}>
             {{- .Title -}}
           </a>
         </summary>
@@ -25,7 +25,7 @@
           {{ range .RegularPages }}
             {{ $pagePublic := default true .Params.public }}
             <li{{ if and $authEnabled (not $pagePublic) }} data-auth-required{{ end }}>
-              <a href="{{ .Permalink }}"{{ if eq . $currentPage }} class="is-active"{{ end }}>
+              <a href="{{ .Permalink }}"{{ if eq . $currentPage }} aria-current="page"{{ end }}>
                 {{- .Title -}}
               </a>
             </li>
