@@ -32,6 +32,7 @@
 @import "blocks/code.css";
 @import "blocks/footer.css";
 @import "blocks/claude.css";
+@import "blocks/hardware.css";
 
 /* --- Exceptions: state-driven deviations --------------------- */
 @import "exceptions/auth.css";

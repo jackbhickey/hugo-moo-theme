@@ -1,0 +1,86 @@
+/* =============================================================
+   Block: Hardware Card
+   Real-time hardware telemetry display via SSE.
+   ============================================================= */
+
+.hardware-card {
+  padding: var(--space-m);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-rule);
+  border-radius: 4px;
+  max-width: 28rem;
+}
+
+.hardware-card-title {
+  font-family: var(--font-heading);
+  font-size: var(--step-1);
+  font-weight: 400;
+  color: var(--color-accent);
+  margin: 0 0 var(--space-s);
+}
+
+.hardware-stats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+.hardware-stat {
+  display: grid;
+  grid-template-columns: 3.5em 1fr auto;
+  gap: var(--space-xs);
+  align-items: center;
+}
+
+.hardware-label {
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hardware-bar {
+  height: 0.75rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-rule);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.hardware-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--color-accent);
+  border-radius: 1px;
+  transition: width 0.4s ease;
+}
+
+.hardware-value {
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  color: var(--color-text-muted);
+  text-align: right;
+  min-width: 6em;
+  white-space: nowrap;
+}
+
+.hardware-status {
+  font-family: var(--font-body);
+  font-size: var(--step--2);
+  color: var(--color-text-faint);
+  margin-top: var(--space-2xs);
+
+  &:empty {
+    display: none;
+  }
+}
+
+.hardware-card[data-state="offline"] {
+  opacity: 0.6;
+
+  & .hardware-bar-fill {
+    background: var(--color-text-faint);
+  }
+}

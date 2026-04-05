@@ -9,3 +9,6 @@
 {{ $css := resources.Get "css/main.css" | css.Build | fingerprint }}
 <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}" crossorigin="anonymous">
 {{ with .Site.Params.authCheckUrl }}<script src="/js/auth.js" defer></script>{{ end }}
+{{ if .HasShortcode "hardware" }}{{ with resources.Get "js/hardware.js" | fingerprint }}
+<script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" defer></script>
+{{ end }}{{ end }}
