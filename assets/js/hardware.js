@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".hardware-card[data-machine]").forEach((card) => {
     const machine = card.dataset.machine;
     const apiBase = card.dataset.apiBase || "";
-    const url = `${apiBase}/api/v1/hardware/${machine}`;
+    const url = `${apiBase}/api/v1/hardware/${machine}/events`;
     const statusEl = card.querySelector(".hardware-status");
     const disksEl = card.querySelector(".hardware-disks");
 
