@@ -24,11 +24,13 @@ document.addEventListener("DOMContentLoaded", () => {
       row.className = "hardware-stat";
       row.dataset.stat = `disk-${mount}`;
       row.innerHTML = `
-        <span class="hardware-label">${mount}</span>
+        <div class="hardware-stat-header">
+          <span class="hardware-label">${mount}</span>
+          <span class="hardware-value">—</span>
+        </div>
         <div class="hardware-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Disk usage for ${mount}">
           <div class="hardware-bar-fill"></div>
-        </div>
-        <span class="hardware-value">—</span>`;
+        </div>`;
       disksEl.appendChild(row);
       return row;
     }
