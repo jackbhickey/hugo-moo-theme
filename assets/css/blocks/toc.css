@@ -1,39 +1,21 @@
 /* =============================================================
    Block: Table of Contents
-   Book-style TOC with dot leaders and serif typography.
+   Classic book-style TOC with dot leaders.
    ============================================================= */
 
 .toc {
   margin-bottom: var(--space-l);
-  padding: var(--space-m) var(--space-l);
-  border: 1px solid var(--color-rule);
-  border-radius: 2px;
-  background: var(--color-surface);
   max-width: var(--measure);
-}
-
-.toc > ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
 }
 
 .toc ul {
   list-style: none;
+  margin: 0;
   padding: 0;
 }
 
-.toc li {
-  margin: 0;
-}
-
 .toc > ul > li {
-  border-bottom: 1px dotted var(--color-rule);
-  padding: var(--space-3xs) 0;
-
-  &:last-child {
-    border-bottom: none;
-  }
+  margin-bottom: var(--space-2xs);
 }
 
 .toc a {
@@ -48,13 +30,28 @@
   }
 }
 
-/* Nested items (h3, h4) */
+/* Nested items with dot leaders */
 .toc ul ul {
   padding-left: var(--space-m);
+}
+
+.toc ul ul li {
+  display: flex;
+  align-items: baseline;
+  margin: 0;
+}
+
+.toc ul ul li::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px dotted var(--color-rule-strong);
+  margin-left: var(--space-3xs);
+  min-width: 1em;
 }
 
 .toc ul ul a {
   font-size: var(--step--1);
   font-style: normal;
   color: var(--color-text-muted);
+  white-space: nowrap;
 }
