@@ -1,12 +1,15 @@
 {{ $machine := .Get 0 }}
 {{ $apiBase := .Site.Params.hardwareApiBase | default "" }}
 <div class="hardware-card" data-machine="{{ $machine }}" data-api-base="{{ $apiBase }}" aria-live="polite">
-  <h3 class="hardware-card-title">{{ $machine }}</h3>
+  <div class="hardware-card-header">
+    <h3 class="hardware-card-title">{{ $machine }}</h3>
+    <span class="hardware-temp" data-stat="temp" aria-label="CPU temperature"></span>
+  </div>
   <div class="hardware-stats">
     <div class="hardware-stat" data-stat="cpu">
       <div class="hardware-stat-header">
         <span class="hardware-label">CPU</span>
-        <span><span class="hardware-value">—</span><span class="hardware-temp" data-stat="temp"></span></span>
+        <span class="hardware-value">—</span>
       </div>
       <div class="hardware-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="CPU usage">
         <div class="hardware-bar-fill"></div>
@@ -27,7 +30,6 @@
         <span class="hardware-value">—</span>
       </div>
       <div class="hardware-bar hardware-bar-stacked" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Storage usage"></div>
-      <div class="hardware-disk-legend"></div>
     </div>
   </div>
   <div class="hardware-status">Connecting…</div>

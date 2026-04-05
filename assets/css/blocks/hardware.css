@@ -19,19 +19,36 @@
   flex: 1 1 14rem;
 }
 
+.hardware-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: var(--space-s);
+}
+
 .hardware-card-title {
   font-family: var(--font-heading);
   font-size: var(--step-1);
   font-weight: 400;
   color: var(--color-accent);
-  margin: 0 0 var(--space-s);
+  margin: 0;
   border-bottom: none;
   padding-bottom: 0;
 }
 
 /* Override prose heading margins when inside a card */
 .hardware-card .hardware-card-title {
-  margin: 0 0 var(--space-s);
+  margin: 0;
+}
+
+.hardware-temp {
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  color: var(--color-text-faint);
+
+  &:empty {
+    display: none;
+  }
 }
 
 .hardware-stats {
@@ -61,18 +78,11 @@
 .hardware-value {
   font-family: var(--font-mono);
   font-size: var(--step--2);
-  color: var(--color-text-muted);
+  color: var(--color-text-faint);
 }
 
-.hardware-temp {
-  font-family: var(--font-mono);
-  font-size: var(--step--2);
-  color: var(--color-text-faint);
-  margin-left: var(--space-2xs);
-
-  &:empty {
-    display: none;
-  }
+.hardware-value-used {
+  color: var(--color-text-muted);
 }
 
 .hardware-bar {
@@ -94,6 +104,7 @@
 
 .hardware-bar-stacked {
   display: flex;
+  cursor: default;
 }
 
 .hardware-bar-segment {
@@ -103,34 +114,6 @@
 
 .hardware-bar-segment + .hardware-bar-segment {
   border-left: 1px solid var(--color-surface);
-}
-
-.hardware-disk-legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3xs) var(--space-xs);
-  margin-top: 2px;
-
-  &:empty {
-    display: none;
-  }
-}
-
-.hardware-legend-item {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  font-family: var(--font-mono);
-  font-size: var(--step--2);
-  color: var(--color-text-faint);
-}
-
-.hardware-legend-swatch {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 1px;
-  flex-shrink: 0;
 }
 
 .hardware-status {
