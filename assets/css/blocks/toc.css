@@ -6,6 +6,10 @@
 .toc {
   margin-bottom: var(--space-l);
   max-width: var(--measure);
+  padding: var(--space-m) var(--space-l);
+  border: 1px solid var(--color-rule);
+  border-radius: 2px;
+  background: var(--color-surface);
 }
 
 .toc ul {
