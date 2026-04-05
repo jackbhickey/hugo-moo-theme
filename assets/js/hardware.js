@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const machine = card.dataset.machine;
     const apiBase = card.dataset.apiBase || "";
     const url = `${apiBase}/api/v1/hardware/${machine}/events`;
-    const statusEl = card.querySelector(".hardware-status");
 
     function updateBar(stat, percent, used, total) {
       const row = card.querySelector(`[data-stat="${stat}"]`);
@@ -79,8 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function handleMessage(event) {
       const data = JSON.parse(event.data);
-      card.removeAttribute("data-state");
-      statusEl.textContent = "";
+      card.setAttribute("data-state", "connected");
 
       updateBar("cpu", data.cpu.percent, `${data.cpu.percent.toFixed(1)}%`, null);
 
@@ -101,8 +99,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (data.network) {
         const rx = card.querySelector(".hardware-net-rx");
         const tx = card.querySelector(".hardware-net-tx");
-        if (rx) rx.innerHTML = `\u2193 ${formatRate(data.network.rxBytesPerSec)}`;
-        if (tx) tx.innerHTML = `\u2191 ${formatRate(data.network.txBytesPerSec)}`;
+        if (rx) rx.innerHTML = `rx ${formatRate(data.network.rxBytesPerSec)}`;
+        if (tx) tx.innerHTML = `tx ${formatRate(data.network.txBytesPerSec)}`;
       }
     }
 
@@ -111,7 +109,6 @@ document.addEventListener("DOMContentLoaded", () => {
       es.onmessage = handleMessage;
       es.onerror = () => {
         card.setAttribute("data-state", "offline");
-        statusEl.textContent = "Offline";
       };
     }
 
