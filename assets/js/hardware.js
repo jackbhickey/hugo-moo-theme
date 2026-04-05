@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const tempEl = card.querySelector('[data-stat="temp"]');
       if (tempEl) {
-        tempEl.textContent = data.cpu.tempC > 0 ? `${data.cpu.tempC}\u00B0C` : "";
+        tempEl.textContent = data.cpu.tempC > 0 ? ` (${data.cpu.tempC}\u00B0C)` : "";
       }
 
       const memUsedGB = (data.memory.usedMB / 1024).toFixed(1);
