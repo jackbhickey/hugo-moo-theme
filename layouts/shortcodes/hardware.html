@@ -1,7 +1,9 @@
 {{ $machine := .Get 0 }}
+{{ $subtitle := .Get 1 }}
 {{ $apiBase := .Site.Params.hardwareApiBase | default "" }}
 <div class="hardware-card" data-machine="{{ $machine }}" data-api-base="{{ $apiBase }}" aria-live="polite">
   <h3 class="hardware-card-title">{{ $machine }}</h3>
+  {{ with $subtitle }}<p class="hardware-card-subtitle">{{ . }}</p>{{ end }}
   <div class="hardware-stats">
     <div class="hardware-stat" data-stat="cpu">
       <div class="hardware-stat-header">

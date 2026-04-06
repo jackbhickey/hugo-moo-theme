@@ -26,14 +26,27 @@
   font-size: var(--step-1);
   font-weight: 400;
   color: var(--color-accent);
-  margin: 0 0 var(--space-s);
+  margin: 0;
   border-bottom: none;
   padding-bottom: 0;
 }
 
+/* When no subtitle follows, add bottom space */
+.hardware-card-title:last-of-type + .hardware-stats {
+  margin-top: var(--space-s);
+}
+
 /* Override prose heading margins when inside a card */
 .hardware-card .hardware-card-title {
+  margin: 0 0 var(--space-3xs);
+}
+
+.hardware-card-subtitle {
+  font-family: var(--font-body);
+  font-size: var(--step--2);
+  color: var(--color-text-faint);
   margin: 0 0 var(--space-s);
+  font-style: italic;
 }
 
 .hardware-temp {
