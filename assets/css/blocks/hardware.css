@@ -156,3 +156,85 @@
     background: var(--color-text-faint);
   }
 }
+
+/* Heatmap rows (services / backups / storage health) at the bottom of a card */
+
+.hardware-heatmaps {
+  margin-top: var(--space-2xs);
+  padding-top: var(--space-2xs);
+  border-top: 1px solid var(--color-rule);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hardware-heatmaps[hidden] {
+  display: none;
+}
+
+.hardware-heatmap-row {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr;
+  align-items: center;
+  gap: var(--space-2xs);
+}
+
+.hardware-heatmap-row[hidden] {
+  display: none;
+}
+
+.hardware-heatmap-label {
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  color: var(--color-text-muted);
+}
+
+.hardware-heatmap-cells {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.hardware-heatmap-cell {
+  position: relative;
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 2px;
+  background: var(--color-text-faint);
+  display: inline-block;
+  cursor: default;
+  transition: transform 0.1s ease;
+}
+
+.hardware-heatmap-cell:hover,
+.hardware-heatmap-cell:focus-visible {
+  transform: scale(1.25);
+  outline: 1px solid var(--color-text);
+  outline-offset: 1px;
+  z-index: 2;
+}
+
+.hardware-heatmap-cell:hover::after,
+.hardware-heatmap-cell:focus-visible::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%) scale(0.8);   /* counter the parent scale(1.25) */
+  background: var(--color-surface-alt);
+  color: var(--color-text);
+  border: 1px solid var(--color-rule);
+  padding: 3px 6px;
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.hardware-heatmap-cell.is-up { background: #16a34a; }
+.hardware-heatmap-cell.is-warm { background: #ca8a04; }      /* yellow — backup 1-2 days old */
+.hardware-heatmap-cell.is-stale { background: #ea580c; }     /* orange — backup >2 days old */
+.hardware-heatmap-cell.is-down { background: #dc2626; }
+.hardware-heatmap-cell.is-unknown { background: var(--color-text-faint); }
