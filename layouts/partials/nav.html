@@ -4,36 +4,15 @@
     {{ with .Site.Params.subtitle }}<span class="sidebar-subtitle">{{ . }}</span>{{ end }}
   </div>
 
-  <nav class="sidebar-nav" aria-label="Documentation">
-    <a href="{{ "/" | relURL }}" class="nav-home"{{ if .IsHome }} aria-current="page"{{ end }}>
-      Overview
-    </a>
-
-    {{ $currentPage := . }}
-    {{ $authEnabled := .Site.Params.authCheckUrl }}
-    {{ range .Site.Sections }}
-      {{ $sectionSlug := .Section }}
-      {{ $isOpen := or (eq $currentPage.Section $sectionSlug) (eq $currentPage.Permalink .Permalink) }}
-      {{ $sectionPublic := default true .Params.public }}
-      <details class="nav-section"{{ if $isOpen }} open{{ end }}{{ if and $authEnabled (not $sectionPublic) }} data-auth-required{{ end }}>
-        <summary>
-          <a href="{{ .Permalink }}"{{ if eq $currentPage.Permalink .Permalink }} aria-current="page"{{ end }}>
-            {{- .Title -}}
-          </a>
-        </summary>
-        <ul class="nav-pages">
-          {{ range .RegularPages }}
-            {{ $pagePublic := default true .Params.public }}
-            <li{{ if and $authEnabled (not $pagePublic) }} data-auth-required{{ end }}>
-              <a href="{{ .Permalink }}"{{ if eq . $currentPage }} aria-current="page"{{ end }}>
-                {{- .Title -}}
-              </a>
-            </li>
-          {{ end }}
-        </ul>
-      </details>
-    {{ end }}
-  </nav>
+  {{- /* Render the FULL nav when either: auth isn't configured at all (no proxy
+         gating, so `public` is ignored and everything shows — the theme's
+         documented no-auth behavior); OR this page is itself gated (public:false),
+         meaning only authed users receive it, so the full nav is safe to embed.
+         Otherwise (auth on + public page) render the trimmed nav and let htmx
+         fetch /_nav.html to upgrade it once the visitor proves they're authed. */ -}}
+  {{ $authEnabled := ne (.Site.Params.authCheckUrl | default "") "" }}
+  {{ $full := or (not $authEnabled) (not (default true .Params.public)) }}
+  {{ partial "nav-list.html" (dict "ctx" . "full" $full "authEnabled" $authEnabled) }}
 
   <div class="sidebar-footer">
     {{ with .Site.Params.authCheckUrl }}

@@ -1,0 +1,51 @@
+{{- /*
+  Renders the <nav class="sidebar-nav"> list. Shared by:
+    - partials/nav.html        (the sidebar on every page)
+    - _default/nav-fragment.html (the /_nav.html htmx fragment)
+
+  Params (dict):
+    ctx         the page being rendered (for .Site, .IsHome, current-page match)
+    full        bool — render ALL sections (true) or only public ones (false)
+    authEnabled bool — auth is configured, so wire the htmx upgrade fetch
+
+  Trim model: a PUBLIC page is built with only public entries, so its HTML
+  never carries protected titles/URLs. A PROTECTED page (full=true) is only
+  ever served to authed users by the proxy, so it can safely carry everything.
+  When auth is on AND the page is trimmed, htmx fetches /_nav.html on load and
+  swaps in the full nav — but only an authenticated request gets a 200 back
+  (anon gets 401, htmx leaves the trimmed nav untouched).
+*/ -}}
+{{- $ctx := .ctx -}}
+{{- $full := .full -}}
+{{- $swap := and .authEnabled (not $full) -}}
+<nav class="sidebar-nav" aria-label="Documentation"{{ if $swap }} hx-get="/_nav.html" hx-trigger="load" hx-target="this" hx-swap="outerHTML"{{ end }}>
+  <a href="{{ "/" | relURL }}" class="nav-home"{{ if $ctx.IsHome }} aria-current="page"{{ end }}>
+    Overview
+  </a>
+
+  {{ range $ctx.Site.Sections }}
+    {{ $sectionPublic := default true .Params.public }}
+    {{ if or $full $sectionPublic }}
+      {{ $isOpen := or (eq $ctx.Section .Section) (eq $ctx.Permalink .Permalink) }}
+      <details class="nav-section"{{ if $isOpen }} open{{ end }}>
+        <summary>
+          <a href="{{ .Permalink }}"{{ if eq $ctx.Permalink .Permalink }} aria-current="page"{{ end }}>
+            {{- .Title -}}
+          </a>
+        </summary>
+        <ul class="nav-pages">
+          {{ range .RegularPages }}
+            {{ $pagePublic := default true .Params.public }}
+            {{ if or $full (and $sectionPublic $pagePublic) }}
+              <li>
+                <a href="{{ .Permalink }}"{{ if eq . $ctx }} aria-current="page"{{ end }}>
+                  {{- .Title -}}
+                </a>
+              </li>
+            {{ end }}
+          {{ end }}
+        </ul>
+      </details>
+    {{ end }}
+  {{ end }}
+</nav>

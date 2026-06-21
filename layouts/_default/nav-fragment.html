@@ -1,0 +1,11 @@
+{{- /*
+  Standalone layout (no baseof): emits ONLY the full <nav class="sidebar-nav">.
+  Served at /_nav.html behind the auth proxy and fetched by htmx to upgrade a
+  trimmed sidebar once the visitor is known to be authenticated.
+
+  full=true  -> every section, including protected ones (the proxy guarantees
+                only authed users ever receive this response).
+  authEnabled=false -> the returned <nav> carries NO hx-* attributes, so after
+                the swap it will not fire another load->fetch loop.
+*/ -}}
+{{- partial "nav-list.html" (dict "ctx" . "full" true "authEnabled" false) -}}

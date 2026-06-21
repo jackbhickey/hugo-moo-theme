@@ -1,10 +1,12 @@
 ---
 title: "Auth Visibility"
-description: "Optional client-side show/hide for authenticated content"
+description: "Build-time nav trimming + htmx upgrade for authenticated content"
 weight: 4
 ---
 
-moo-theme includes an optional auth-aware visibility system. When enabled, pages with `public: false` in their frontmatter are hidden from navigation and the home page for unauthenticated visitors. The server still enforces access control — this is purely cosmetic.
+moo-theme includes an optional auth-aware visibility system. When enabled, pages with `public: false` in their frontmatter are **trimmed out of the build output** that unauthenticated visitors receive — their titles and URLs never appear in the public HTML, sitemap, or RSS feed. This is **not** a cosmetic CSS hide: the protected metadata is genuinely withheld, and the reverse proxy enforces access to the pages themselves.
+
+Authenticated visitors get the full navigation back via a tiny [htmx](https://htmx.org/) fetch, so the experience is seamless once they're signed in.
 
 ## Enabling auth
 
@@ -17,7 +19,10 @@ Add these params to `hugo.toml`:
   signOutUrl = "/oauth2/sign_out"            # optional, defaults to this
 ```
 
-Then provide a `static/js/auth.js` that checks the endpoint and sets a data attribute on `<html>`:
+When `authCheckUrl` is set, the theme automatically:
+
+- loads its vendored copy of **htmx** (pinned + fetched reproducibly via the theme's `flake.nix`, served with a Subresource Integrity hash), and
+- includes a small `auth.js` you provide at `static/js/auth.js`, which toggles the sign-in / sign-out links:
 
 ```javascript
 (function () {
@@ -31,7 +36,27 @@ Then provide a `static/js/auth.js` that checks the endpoint and sets a data attr
 })();
 ```
 
-The theme includes this script automatically when `authCheckUrl` is set.
+## The nav fragment (`/_nav.html`)
+
+Trimmed public pages ship the public-only sidebar plus an htmx hook that fetches the **full** nav from `/_nav.html` once the visitor is known to be authenticated. Publish that fragment with a one-page content stub using the theme's `nav-fragment` layout:
+
+```yaml
+---
+# content/nav.md  → published at /_nav.html
+title: "nav"
+url: "/_nav.html"
+layout: "nav-fragment"
+public: false
+sitemap:
+  disable: true
+build:
+  list: never
+  render: always
+  publishResources: false
+---
+```
+
+The `nav-fragment` layout renders **only** a `<nav class="sidebar-nav">` (no `<head>`/`<body>`), with every section included and **no** `hx-*` attributes, so the swapped-in nav doesn't re-fetch itself. It must be served behind auth and return **401 to anonymous requests** (see below).
 
 ## Marking pages
 
@@ -44,36 +69,37 @@ public: false
 ---
 ```
 
-When auth is not enabled (no `authCheckUrl`), the `public` field is ignored and everything is visible.
+When auth is not enabled (no `authCheckUrl`), the `public` field is ignored and everything is visible, listed, and fed — the trimming only kicks in once there's a proxy actually gating access.
+
+> **Keep `public: false` consistent with what your proxy gates.** A page's own `public` flag decides which nav it's built with: a `public: false` page is built with the *full* nav, on the assumption the proxy only ever serves it to authenticated users. If you mark a page `public: false` but leave it publicly reachable, that page will hand the full nav to anonymous visitors. Gate it, or mark it `public: true`.
 
 ## How it works
 
-1. **Templates** add `data-auth-required` to nav items and home page cards for non-public pages.
-2. **JS** fetches `authCheckUrl`. If it returns 200, sets `data-authenticated` on `<html>`.
-3. **CSS** hides `[data-auth-required]` by default, reveals when `[data-authenticated]` is present.
+1. **Build time.** A public page is built with only public nav entries and home-page cards. A `public: false` page is built with the full nav — safe, because the proxy only delivers it to authenticated users.
+2. **Upgrade fetch.** The trimmed nav carries `hx-get="/_nav.html" hx-trigger="load" hx-target="this" hx-swap="outerHTML"`. On load, htmx fetches the fragment. An authenticated request gets **200** and the full nav is swapped in; an anonymous request gets **401**, which htmx treats as an error and leaves the trimmed nav untouched.
+3. **Feeds.** `sitemap.xml` and the RSS templates filter out `public: false` pages, so neither enumerates protected URLs or leaks their summaries.
+4. **Links.** `auth.js` sets `data-authenticated` on `<html>`, which CSS uses only to toggle the sign-in / sign-out links.
 
 ```css
-[data-auth-required] { display: none; }
-:root[data-authenticated] [data-auth-required] { display: unset; }
+[data-show-when="signed-in"] { display: none; }
+:root[data-authenticated] [data-show-when="signed-in"] { display: unset; }
+:root[data-authenticated] [data-show-when="signed-out"] { display: none; }
 ```
 
 ## Sign-in / sign-out links
 
-When auth is enabled, the sidebar footer shows a "Sign in" link (visible when signed out) and a "Sign out" link (visible when signed in). These use `data-show-when="signed-out"` and `data-show-when="signed-in"` attributes.
+When auth is enabled, the sidebar footer shows a "Sign in" link (visible when signed out) and a "Sign out" link (visible when signed in), via `data-show-when="signed-out"` / `data-show-when="signed-in"`.
 
 ## Server-side enforcement
 
-The theme only handles visibility. You still need your reverse proxy to actually block access to protected pages and provide the `/auth-check` endpoint. Below are complete examples for Caddy and nginx, both using [oauth2-proxy](https://oauth2-proxy.github.io/oauth2-proxy/) as the auth layer.
+The theme trims the build and wires the upgrade fetch; your reverse proxy still enforces access and provides two endpoints. Below are complete examples for Caddy and nginx, both using [oauth2-proxy](https://oauth2-proxy.github.io/oauth2-proxy/) as the auth layer.
 
-### The auth-check endpoint
+### The two auth endpoints
 
-The JS makes a `GET /auth-check` request with cookies. Your reverse proxy needs to:
+Both must forward to oauth2-proxy's `/oauth2/auth` and, on failure, return a **clean 401 — no redirect, no HTML**:
 
-- Forward the request to oauth2-proxy's `/oauth2/auth` endpoint
-- If oauth2-proxy returns **200**: respond with 200 (user is authenticated)
-- If oauth2-proxy returns **401**: respond with 401 (no redirect, no HTML — just the status code)
-
-This is important — the endpoint must **not** redirect to a sign-in page on failure. The JS expects a clean 200 or 401.
+- **`/auth-check`** — the JS reads this to set the sign-in/out link state.
+- **`/_nav.html`** — htmx fetches this to upgrade the nav. If it redirects to a sign-in page instead of returning 401, htmx will follow the redirect and swap the **login page** into your sidebar. Returning 401 is essential.
 
 ### Caddy example
 
@@ -96,6 +122,19 @@ docs.example.com {
             }
         }
         respond 200
+    }
+
+    # Full nav fragment for the htmx upgrade — 200 (authed) or 401 (anon).
+    # MUST NOT redirect, or htmx would swap the sign-in page into the sidebar.
+    handle /_nav.html {
+        forward_auth oauth2-proxy:4180 {
+            uri /oauth2/auth
+            @unauthorized status 401
+            handle_response @unauthorized {
+                respond 401
+            }
+        }
+        file_server
     }
 
     # Public sections — no auth required
@@ -128,10 +167,8 @@ docs.example.com {
 ```
 
 Key points:
-- `handle /auth-check` is separate from the public and protected handlers
-- On auth failure it returns `respond 401` — not a redirect
-- Public paths are listed explicitly in the `@public` matcher
-- Protected paths use `forward_auth` with a redirect to the sign-in page
+- `handle /auth-check` and `handle /_nav.html` are separate from the public and protected handlers, and both `respond 401` on failure rather than redirecting
+- Public paths are listed explicitly in the `@public` matcher; protected paths fall through to the catch-all `handle`, which *does* redirect humans to the sign-in page
 - The `rd` query parameter preserves the original URL so the user returns to the right page after signing in
 
 ### nginx example
@@ -151,7 +188,7 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
     }
 
-    # Auth check — returns 200 or 401, no redirects
+    # Internal subrequest target
     location = /auth-check {
         internal;
         proxy_pass http://oauth2-proxy:4180/oauth2/auth;
@@ -160,15 +197,21 @@ server {
         proxy_set_header X-Original-URI $request_uri;
     }
 
-    # Expose auth-check to JS (wraps the internal location)
+    # Auth check exposed to JS — 200 or 401, no redirect
     location = /_auth-check {
         auth_request /auth-check;
-        auth_request_set $auth_status $upstream_status;
         return 200;
-
-        error_page 401 = @auth_check_denied;
+        error_page 401 = @deny_401;
     }
-    location @auth_check_denied {
+
+    # Full nav fragment for the htmx upgrade — 200 (authed) or 401 (anon)
+    location = /_nav.html {
+        auth_request /auth-check;
+        error_page 401 = @deny_401;
+        try_files $uri =404;
+    }
+
+    location @deny_401 {
         return 401;
     }
 
@@ -176,26 +219,21 @@ server {
     location / {
         try_files $uri $uri/ $uri.html =404;
     }
-
     location /blog/ {
         try_files $uri $uri/ $uri.html =404;
     }
 
-    # Protected sections — require auth
+    # Protected sections — require auth, redirect humans to sign-in
     location /networking/ {
         auth_request /auth-check;
-        auth_request_set $auth_user $upstream_http_x_auth_request_user;
-
         error_page 401 = @sign_in_redirect;
         try_files $uri $uri/ $uri.html =404;
     }
-
     location /deployment/ {
         auth_request /auth-check;
         error_page 401 = @sign_in_redirect;
         try_files $uri $uri/ $uri.html =404;
     }
-
     # Add more protected locations as needed...
 
     location @sign_in_redirect {
@@ -206,11 +244,9 @@ server {
 
 Key points:
 - nginx uses `auth_request` to subrequest oauth2-proxy
-- The `/auth-check` location is `internal` — only accessible via `auth_request`
-- `/_auth-check` wraps it as a public endpoint for the JS to fetch
-- Set `authCheckUrl` to `/_auth-check` in your `hugo.toml` (note the underscore)
-- Each protected location needs its own `auth_request` directive — nginx doesn't have Caddy's catch-all `handle` pattern
-- `error_page 401` redirects to the sign-in page with the original URL preserved
+- `/_auth-check` (set `authCheckUrl` to it, note the underscore) and `/_nav.html` both return a bare **401** via `@deny_401` — no redirect
+- Page locations redirect humans to the sign-in page via `@sign_in_redirect`
+- Each protected location needs its own `auth_request` — nginx has no catch-all like Caddy's `handle`
 
 ### oauth2-proxy configuration
 

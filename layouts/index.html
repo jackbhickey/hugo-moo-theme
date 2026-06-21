@@ -21,16 +21,21 @@
     {{ end }}
   {{ end }}
 
-  {{ $authEnabled := .Site.Params.authCheckUrl }}
+  {{- /* The home page is public, so its HTML is served to everyone — when auth is
+         enabled, only emit public section cards (authed users reach protected
+         sections through the sidebar, which htmx upgrades on load). With no auth
+         configured, `public` is ignored and every card shows. */ -}}
+  {{ $authEnabled := ne (.Site.Params.authCheckUrl | default "") "" }}
   <section class="home-docs" aria-label="Documentation">
     <h2>Documentation</h2>
     <nav class="home-sections grid">
       {{ range .Site.Sections }}
-        {{ $sectionPublic := default true .Params.public }}
-        <a href="{{ .Permalink }}" class="home-section-card"{{ if and $authEnabled (not $sectionPublic) }} data-auth-required{{ end }}>
+        {{ if or (not $authEnabled) (default true .Params.public) }}
+        <a href="{{ .Permalink }}" class="home-section-card">
           <h2>{{ .Title }}</h2>
           {{ with .Description }}<p>{{ . }}</p>{{ end }}
         </a>
+        {{ end }}
       {{ end }}
     </nav>
   </section>
