@@ -1,0 +1,24 @@
+{{- /*
+  auth-include — embed content only authenticated visitors may see.
+
+  Renders ONLY a placeholder into the public page. The real content lives at
+  `page` (a separate, proxy-gated URL) and is pulled in by htmx once the visitor
+  is authenticated, so the protected bytes are never shipped to anonymous
+  visitors. The reverse proxy MUST return 401 (not a redirect) to htmx's fetch —
+  see the "Beyond the nav" section of the Auth Visibility guide.
+
+  Params:
+    page    (required) URL of the gated content, e.g. "/internal/runbook/".
+    select  (optional) CSS selector to extract from that page (htmx hx-select),
+            e.g. ".prose"; omit if `page` already returns a bare fragment.
+  Inner (optional): placeholder shown to anonymous visitors; defaults to a
+    sign-in prompt. Used only when written as a paired shortcode.
+
+  Requires auth to be configured (htmx is only loaded when authCheckUrl is set).
+*/ -}}
+{{- $page := .Get "page" -}}
+{{- if not $page -}}{{- errorf "auth-include: missing required `page` param (%s)" .Position -}}{{- end -}}
+{{- $select := .Get "select" -}}
+<div class="auth-include" hx-get="{{ $page | relURL }}" hx-trigger="load" hx-target="this" hx-swap="outerHTML"{{ with $select }} hx-select="{{ . }}"{{ end }}>
+  {{ with .Inner }}{{ . }}{{ else }}<p><em>Sign in to view this content.</em></p>{{ end }}
+</div>

@@ -263,3 +263,116 @@ Both examples assume oauth2-proxy is running with at minimum:
 The `--upstream=static://200` is important — oauth2-proxy isn't proxying to a backend, it's only handling auth. The reverse proxy (Caddy/nginx) serves the actual files.
 
 If you want the sign-in page to redirect straight to your OIDC provider without an intermediate button, add `--skip-provider-button=true`. Note that this breaks the `rd` (redirect) parameter — after signing in, users will always land on `/` instead of the page they were trying to access. If you need the redirect to work, keep the provider button and consider [customising the sign-in template](https://oauth2-proxy.github.io/oauth2-proxy/configuration/overview#custom-templates) to match your site's look.
+
+## Beyond the nav: embedding protected content
+
+The sidebar is just the first use of one general idea:
+
+> Serve a **public skeleton**, then let htmx swap in **protected fragments fetched from proxy-gated URLs** once the visitor is authenticated.
+
+`/_nav.html` is one such fragment. The same move works *inside a page* to hide specific content from anonymous visitors — under the same rule that keeps the nav safe:
+
+**The protected bytes must live only at a URL your proxy gates. Never render them into the public page.** A wrapper that hides inline content with CSS is not secure — it ships the content and merely hides it.
+
+### The `auth-include` shortcode
+
+Put the protected content in its own page marked `public: false`, then embed it from a public page:
+
+```text
+{{</* auth-include page="/internal/runbook/" select=".prose" /*/>}}
+```
+
+That renders **only** a placeholder into the public page — the real content is never in this HTML:
+
+```html
+<div class="auth-include" hx-get="/internal/runbook/" hx-trigger="load"
+     hx-target="this" hx-swap="outerHTML" hx-select=".prose">
+  <p><em>Sign in to view this content.</em></p>
+</div>
+```
+
+- `page` — URL of the gated content (required).
+- `select` — optional CSS selector ([`hx-select`](https://htmx.org/attributes/hx-select/)) that extracts a region from `page`; omit it if `page` already returns a bare fragment (like the `nav-fragment` layout).
+- Override the anonymous placeholder with the paired form: `{{</* auth-include page="/internal/x/" */>}}Members only.{{</* /auth-include */>}}`.
+
+Anonymous visitors keep the placeholder (their fetch is refused); authenticated visitors get the content swapped in. Requires auth to be enabled — htmx is only loaded when `authCheckUrl` is set.
+
+### Handling it in the reverse proxy
+
+A protected page normally **302-redirects** anonymous humans to sign-in — but htmx must receive a **401** instead (a 302 would make htmx follow the redirect and swap the *sign-in page* into your content). htmx adds an **`HX-Request: true`** header to every fetch, which is the discriminator. Two strategies:
+
+**1. Dedicated fragment endpoint — simplest, most portable.** Serve the content at a URL meant only for embedding that *always* returns 401 to anonymous requests, exactly like `/_nav.html`. No header logic; the `/_nav.html` Caddy/nginx blocks above are the template, and it behaves identically under Envoy.
+
+**2. Reuse a human-navigable page.** If the same page should also be directly reachable (humans redirected to sign-in, htmx gets a clean 401), branch on `HX-Request`:
+
+*Caddy* — inside the protected `handle`'s unauthorized response:
+
+```caddy
+handle_response @unauthorized {
+    @htmx header HX-Request true
+    route {
+        respond @htmx 401
+        redir * /oauth2/sign_in?rd={scheme}://{host}{uri}
+    }
+}
+```
+
+*nginx*:
+
+```nginx
+location /internal/ {
+    auth_request /auth-check;
+    error_page 401 = @auth_required;
+    try_files $uri $uri/ $uri.html =404;
+}
+location @auth_required {
+    if ($http_hx_request = "true") { return 401; }
+    return 302 /oauth2/sign_in?rd=$scheme://$host$request_uri;
+}
+```
+
+*Envoy* — gate with the `ext_authz` HTTP filter pointing at oauth2-proxy's `/oauth2/auth`, which returns **401** on denial. Envoy forwards that 401 to the client by default — already what htmx needs:
+
+```yaml
+http_filters:
+- name: envoy.filters.http.ext_authz
+  typed_config:
+    "@type": type.googleapis.com/envoy.extensions.filters.http.ext_authz.v3.ExtAuthz
+    transport_api_version: V3
+    http_service:
+      server_uri: { uri: oauth2-proxy:4180, cluster: oauth2-proxy, timeout: 2s }
+      path_prefix: /oauth2/auth
+      authorization_request:
+        allowed_headers:
+          patterns: [{ exact: cookie }, { exact: hx-request }]
+      authorization_response:
+        allowed_upstream_headers:
+          patterns: [{ exact: x-auth-request-user }, { exact: x-auth-request-email }]
+- name: envoy.filters.http.router
+  typed_config:
+    "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+```
+
+Because a 401 is the right default for htmx, embedding needs nothing extra under Envoy. Redirecting *human* visitors to sign-in is the part that differs from Caddy/nginx — send them through oauth2-proxy's `/oauth2/start?rd=…`, e.g. a route matched on the *absence* of `hx-request`, or an Envoy `local_reply` that rewrites the 401 to a 302 for non-htmx requests. For most setups it's simpler to use strategy 1 (a dedicated always-401 fragment) under Envoy.
+
+> **Caching:** like `/_nav.html`, these gated fragments must never be cached for anonymous requests. They're cookie-gated, so a correctly configured CDN won't cache them — just don't put a blanket `Cache-Control: public` on those paths.
+
+## Future features
+
+### Inline protected sections
+
+`auth-include` keeps the protected content in a *separate* page. A nicer authoring experience would mark a region **inline** in the host page:
+
+```text
+{{</* protected */>}}
+Only authenticated readers see this paragraph.
+{{</* /protected */>}}
+```
+
+The catch is the security rule: that body must **not** appear in the public page's HTML, so inline authoring needs a second render of the page that only the proxy-gated path serves. The sketch:
+
+1. Add a custom Hugo **output format** (e.g. `PROTECTED`) to the page, published at a path the proxy 401-gates (e.g. `/_protected/<page>/`).
+2. The `protected` shortcode renders **differently per output**: in the default HTML output it emits a placeholder `<div hx-get="…the PROTECTED url…" hx-select="#blk-N">`; in the `PROTECTED` output it emits the real body wrapped in `#blk-N`.
+3. htmx pulls each block from the gated output and selects its region in.
+
+That keeps the prose inline in one source file while still never shipping it to anonymous visitors. It's more moving parts than `auth-include` (an output format, per-block ids, and a proxy rule for the protected output), so it isn't built yet.
