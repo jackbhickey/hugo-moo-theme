@@ -51,11 +51,18 @@ Nix pins the rest of the toolchain too (`nix develop` → Hugo + Biome + direnv)
 
 ## Contributing
 
-CSS is linted and formatted with [Biome](https://biomejs.dev). Install it however you prefer:
+The repo ships a `flake.nix` that pins the whole toolchain, so [Nix](https://nixos.org/download) is the recommended way to get set up — one command gives you Hugo, Biome, and direnv at the versions the project expects:
 
-- [Manual installation](https://biomejs.dev/guides/manual-installation/) (standalone binary, no npm required)
-- [Getting started](https://biomejs.dev/guides/getting-started/)
-- This repo includes a `flake.nix` — run `nix develop` to get Biome, Hugo, and direnv in one shell
+```bash
+nix develop
+```
+
+If you use [direnv](https://direnv.net), `direnv allow` loads the same shell automatically when you `cd` in (the repo's `.envrc` is just `use flake`).
+
+CSS is linted and formatted with [Biome](https://biomejs.dev), which the nix shell already provides. If you'd rather not use nix, install Biome on its own — it's a standalone binary, no npm required — and grab [Hugo](https://gohugo.io/installation/) separately to build and preview the theme:
+
+- [Biome — manual installation](https://biomejs.dev/guides/manual-installation/)
+- [Biome — getting started](https://biomejs.dev/guides/getting-started/)
 
 Run the linter before submitting changes:
 
