@@ -34,18 +34,16 @@ jobs:
       - name: Install rsync + openssh
         run: apt-get update && apt-get install -y rsync openssh-client
 
-      - name: Deploy
+      - name: Deploy to Hokuto
+        # rrsync-jailed user on hokuto (moved from Kizuna 2026-08-20) —
+        # the jail pins the destination, so the path is just "/".
         env:
-          DEPLOY_KEY: ${{ secrets.KIZUNA_DEPLOY_KEY }}
-          DEPLOY_HOST: ${{ secrets.HUGO_MOO_THEME_DEPLOY_HOST }}
-          DEPLOY_USER: ${{ secrets.HUGO_MOO_THEME_DEPLOY_USER }}
-          DEPLOY_PATH: ${{ secrets.HUGO_MOO_THEME_DEPLOY_PATH }}
+          DEPLOY_KEY: ${{ secrets.HOKUTO_DEPLOY_KEY }}
         run: |
           mkdir -p ~/.ssh
           echo "$DEPLOY_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan "$DEPLOY_HOST" >> ~/.ssh/known_hosts
           rsync -avz --delete \
-            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
+            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new" \
             ${{ github.workspace }}/public/ \
-            "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}"
+            hugo-moo-theme-deploy@62.238.98.143:/
