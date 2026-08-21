@@ -46,4 +46,4 @@ jobs:
           rsync -avz --delete \
             -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new" \
             ${{ github.workspace }}/public/ \
-            hugo-moo-theme-deploy@62.238.98.143:/
+            hugo-moo-theme-deploy@62.238.98.143:
