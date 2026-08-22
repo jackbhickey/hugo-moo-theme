@@ -34,16 +34,13 @@ jobs:
       - name: Install rsync + openssh
         run: apt-get update && apt-get install -y rsync openssh-client
 
-      - name: Deploy to Hokuto
-        # rrsync-jailed user on hokuto (moved from Kizuna 2026-08-20) —
-        # the jail pins the destination, so the path is just "/".
+      - name: Deploy to garage bucket
+        # Replicated (rf=2) across the lab garage cluster; caddy serves the
+        # bucket via garage's web endpoint. Scoped S3 key, no ssh.
         env:
-          DEPLOY_KEY: ${{ secrets.HOKUTO_DEPLOY_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.GARAGE_S3_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.GARAGE_S3_SECRET_KEY }}
+          AWS_REGION: garage
         run: |
-          mkdir -p ~/.ssh
-          echo "$DEPLOY_KEY" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          rsync -avz --delete \
-            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new" \
-            ${{ github.workspace }}/public/ \
-            hugo-moo-theme-deploy@62.238.98.143:
+          curl -sL https://github.com/peak/s5cmd/releases/download/v2.2.2/s5cmd_2.2.2_Linux-64bit.tar.gz | tar xz s5cmd
+          ./s5cmd --endpoint-url http://100.116.214.17:3900 sync --delete "public/*" s3://hugo-moo-theme.moo.media/
